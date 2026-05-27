@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Gran Frontera - Captura de Leads</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f9fafb; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-md w-full bg-white rounded-xl shadow-lg border border-gray-100 p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">La Gran Frontera</h2>
+        <p class="text-gray-600 mb-8 text-center text-sm">Déjanos tus datos para avisarte cuando lancemos el e-commerce.</p>
+
+        <form id="leadForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 outline-none"
+                    placeholder="Tu nombre">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 outline-none"
+                    placeholder="Tu teléfono">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" name="email" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 outline-none"
+                    placeholder="tu@email.com">
+            </div>
+
+            <button type="submit" id="submitBtn"
+                class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-md transition-colors disabled:bg-gray-400">
+                Quiero que me avisen
+            </button>
+        </form>
+
+        <div id="responseMsg" class="mt-6 hidden p-3 rounded-md text-center text-sm font-medium"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('leadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const responseMsg = document.getElementById('responseMsg');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Enviando...';
+            responseMsg.classList.add('hidden');
+
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                responseMsg.classList.remove('hidden');
+                if (response.ok) {
+                    responseMsg.className = 'mt-6 p-3 rounded-md text-center text-sm font-medium bg-green-100 text-green-700';
+                    responseMsg.innerText = data.message;
+                    form.reset();
+                } else {
+                    responseMsg.className = 'mt-6 p-3 rounded-md text-center text-sm font-medium bg-red-100 text-red-700';
+                    responseMsg.innerText = data.error || 'Hubo un error.';
+                }
+            } catch (err) {
+                responseMsg.classList.remove('hidden');
+                responseMsg.className = 'mt-6 p-3 rounded-md text-center text-sm font-medium bg-red-100 text-red-700';
+                responseMsg.innerText = 'No se pudo conectar con el servidor.';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Quiero que me avisen';
+            }
+        });
+    </script>
+</body>
+</html>
