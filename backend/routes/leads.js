@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const leadController = require('../controllers/leadController');
+const { registerUser } = require('../controllers/leadController');
 
-router.post('/', leadController.createLead);
+// Ruta para registro de usuarios (Leads)
+router.post('/', registerUser);
 
 module.exports = router;

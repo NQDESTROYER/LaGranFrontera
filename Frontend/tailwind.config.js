@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,16 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#1A1A1A",
-        card: "#262626",
-        primary: "#E91E63",
-        secondary: "#F44336",
-        textPrimary: "#FFFFFF",
-        textSecondary: "#AAAAAA",
-      },
-      fontFamily: {
-        montserrat: ['Montserrat', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
+        primary: "#e91e63", // Este era el antiguo, ahora usamos red-600 de tailwind para consistencia
       },
     },
   },
