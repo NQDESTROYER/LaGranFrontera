@@ -29,7 +29,7 @@ const ContactoLeads = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/leads', {
+      const response = await fetch('https://la-gran-frontera-backend.vercel.app/api/leads', { // Asegúrate de que esta sea la URL de tu backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
